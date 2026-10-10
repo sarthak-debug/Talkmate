@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<title>TalkMate</title>
+<meta name="theme-color" content="#0d6b6e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TalkMate">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Sans+Devanagari:wght@500;700&display=swap">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Talk<span>Mate</span></h1>
+    <div class="stats"><span title="Points">⭐ <b id="xp">0</b></span><span title="Days in a row">🔥 <b id="streak">0</b></span></div>
+    <button class="icon-btn" id="openSettings" aria-label="Settings">⚙︎</button>
+  </header>
+
+  <!-- Tara, the animated speaking partner -->
+  <section class="stage" id="stage">
+    <svg id="avatar" viewBox="0 0 200 200" role="img" aria-label="Tara, your English partner">
+      <circle cx="100" cy="100" r="96" class="halo"/>
+      <g id="body">
+        <path d="M38 200 C42 160 70 146 100 146 C130 146 158 160 162 200 Z" class="top"/>
+        <path d="M86 140 L100 160 L114 140" class="collar"/>
+        <rect x="88" y="128" width="24" height="20" rx="8" class="skin"/>
+      </g>
+      <g id="head">
+        <circle cx="146" cy="58" r="16" class="hair"/>
+        <path d="M46 96 C40 46 74 28 102 30 C134 30 160 50 154 98 C150 70 132 56 100 56 C72 56 52 70 46 96 Z" class="hair"/>
+        <ellipse cx="100" cy="94" rx="50" ry="54" class="skin"/>
+        <path d="M52 86 C56 54 80 44 104 46 C126 46 146 58 148 86 C134 66 116 62 98 62 C80 62 62 70 52 86 Z" class="hair"/>
+        <circle cx="50" cy="104" r="4" class="gold"/><circle cx="150" cy="104" r="4" class="gold"/>
+        <g id="brows"><path d="M70 76 Q80 70 90 75" class="brow"/><path d="M110 75 Q120 70 130 76" class="brow"/></g>
+        <g id="eyes">
+          <ellipse cx="80" cy="92" rx="7" ry="8" class="eye"/><ellipse cx="120" cy="92" rx="7" ry="8" class="eye"/>
+          <g id="pupils"><circle cx="82" cy="89" r="2.4" class="shine"/><circle cx="122" cy="89" r="2.4" class="shine"/></g>
+        </g>
+        <circle cx="68" cy="112" r="8" class="cheek"/><circle cx="132" cy="112" r="8" class="cheek"/>
+        <path d="M98 100 Q96 108 101 109" class="nose"/>
+        <g id="mouth">
+          <path id="smile" d="M86 122 Q100 134 114 122" class="lip"/>
+          <g id="talkMouth"><ellipse id="mouthOpen" cx="100" cy="124" rx="11" ry="3" class="inside"/></g>
+          <path id="bigSmile" d="M84 120 Q100 142 116 120 Z" class="inside"/>
+        </g>
+      </g>
+      <g id="waves"><path d="M164 86 q6 8 0 16" /><path d="M172 80 q10 14 0 28"/></g>
+      <g id="dots"><circle cx="156" cy="40" r="4"/><circle cx="168" cy="32" r="5"/><circle cx="182" cy="22" r="6"/></g>
+    </svg>
+    <div class="caption" id="caption" aria-live="polite">Hi! I'm Tara. Let's practise English together.</div>
+  </section>
+
+  <main>
+    <!-- TALK -->
+    <section class="panel" id="p-talk">
+      <div id="log"></div>
+      <div class="composer">
+        <button class="mic" id="talkMic" aria-label="Speak">🎤</button>
+        <textarea id="msg" placeholder="Tap 🎤 and speak, or type…" aria-label="Your message"></textarea>
+        <button class="send" id="send">Send</button>
+      </div>
+    </section>
+
+    <!-- TRANSLATE -->
+    <section class="panel" id="p-translate" hidden>
+      <div class="scroll">
+        <div class="seg" role="tablist" aria-label="Language">
+          <button data-lang="hi" class="on">हिंदी Hindi</button>
+          <button data-lang="mr">मराठी Marathi</button>
+        </div>
+        <div class="card tcard">
+          <div class="lab">Say this in English</div>
+          <p class="native" id="tNative">…</p>
+          <p class="roman" id="tRoman"></p>
+          <div class="btns">
+            <button class="chip" id="tHear">🔊 Hear again</button>
+            <button class="chip" id="tHint">💡 Hint</button>
+            <button class="chip" id="tShow">👀 Show answer</button>
+          </div>
+          <p class="hint" id="tHintText" hidden></p>
+        </div>
+        <div class="answer-row">
+          <button class="mic big" id="tMic" aria-label="Say it in English">🎤</button>
+          <input id="tInput" placeholder="…or type your English here" aria-label="Your English answer">
+          <button class="send" id="tCheck">Check</button>
+        </div>
+        <div id="tResult"></div>
+        <button class="primary wide" id="tNext">Next sentence →</button>
+      </div>
+    </section>
+
+    <!-- GAMES -->
+    <section class="panel" id="p-games" hidden>
+      <div class="scroll" id="gameArea"></div>
+    </section>
+  </main>
+
+  <nav class="tabs">
+    <button data-tab="talk" class="on"><span>💬</span>Talk</button>
+    <button data-tab="translate"><span>🔁</span>Translate</button>
+    <button data-tab="games"><span>🎮</span>Games</button>
+  </nav>
+</div>
+
+<dialog id="settings">
+  <h2>Settings</h2>
+  <label class="field">Talk topic
+    <select id="topic">
+      <option value="daily life and hobbies">Daily life</option>
+      <option value="work and office situations">At work</option>
+      <option value="a job interview (you are the interviewer, ask one question at a time)">Job interview</option>
+      <option value="travel, shopping and ordering food">Travel &amp; shopping</option>
+      <option value="movies, books and music">Movies &amp; books</option>
+      <option value="anything the learner wants">Free talk</option>
+    </select></label>
+  <label class="field">Level
+    <select id="level">
+      <option value="beginner">Beginner</option>
+      <option value="intermediate" selected>Intermediate</option>
+      <option value="advanced">Advanced</option>
+    </select></label>
+  <label class="field">My accent (helps the mic understand me)
+    <select id="accent">
+      <option value="en-IN" selected>Indian English</option>
+      <option value="en-US">American English</option>
+      <option value="en-GB">British English</option>
+    </select></label>
+  <label class="field">Tara's speed
+    <select id="rate">
+      <option value="0.8">Slow</option>
+      <option value="0.95" selected>Normal</option>
+      <option value="1.1">Fast</option>
+    </select></label>
+  <label class="check"><input type="checkbox" id="autoSpeak" checked> Tara speaks out loud</label>
+  <label class="check"><input type="checkbox" id="autoSend" checked> Send automatically when I stop talking</label>
+  <label class="field">App password <input id="password" type="password" autocomplete="off" placeholder="Only if you set one on the server"></label>
+  <div class="row-btns">
+    <button class="secondary" id="newChat">New chat</button>
+    <button class="primary" id="closeSettings">Done</button>
+  </div>
+  <p class="hint">Install: in Chrome tap ⋮ → "Add to Home screen". On iPhone tap Share → "Add to Home Screen".</p>
+  <p class="hint" id="voiceInfo"></p>
+</dialog>
+
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>
