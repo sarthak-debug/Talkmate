@@ -73,7 +73,7 @@ Only one provider is active at a time. To switch, change the variables and redep
 Open TalkMate, tap **⚙︎** and enter your app password. Then tap **🎤** and allow the microphone.
 
 ### 5. Hindi and Marathi voices (Android)
-For Tara to speak Hindi and Marathi, the phone needs those voices. Go to **Settings → Accessibility (or System) → Text-to-speech → Google → ⚙︎ → Install voice data** and download **Hindi** and **Marathi**. TalkMate's Settings screen shows which voices your phone has. If Marathi is missing, Tara reads Marathi with the Hindi voice, and the sentence is always shown on screen.
+For Tara to speak Hindi and Marathi, the phone needs those voices. Go to **Settings → Accessibility (or System) → Text-to-speech → Google → ⚙︎ → Install voice data** and download **Hindi** and **Marathi**. TalkMate's Settings screen shows which voices your phone has. If Marathi is missing, Tara reads Marathi with the Hindi voice, and the sentence is always sshown on screen.
 
 ## Tips
 - In Settings you can change the topic, level, your accent (Indian English is the default so the mic understands you better), and Tara's speaking speed.
