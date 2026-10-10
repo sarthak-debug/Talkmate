@@ -1,8 +1,0 @@
-{
-  "name": "talkmate",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "description": "AI English speaking partner – installable mobile web app",
-  "engines": { "node": ">=18" }
-}
