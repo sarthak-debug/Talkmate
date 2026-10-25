@@ -1,5 +1,5 @@
 // Caches the app shell so TalkMate opens fast and can be installed.
-const CACHE = "talkmate-v3";
+const CACHE = "talkmate-v4";
 const SHELL = ["/", "/index.html", "/styles.css", "/js/app.js", "/js/data.js", "/manifest.json", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", e => {

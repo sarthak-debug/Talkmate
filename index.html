@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-size="normal">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
@@ -15,10 +15,13 @@
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<div class="app">
-  <header>
-    <h1>Talk<span>Mate</span></h1>
-    <div class="stats"><span title="Points">⭐ <b id="xp">0</b></span><span title="Days in a row">🔥 <b id="streak">0</b></span></div>
+<div class="app" id="app" data-screen="home">
+  <header class="bar">
+    <button class="back" id="back" hidden aria-label="Back to home">‹ <span>Home</span></button>
+    <h1 id="title">Talk<span>Mate</span></h1>
+    <button class="battery" id="battery" aria-label="Free AI left today">
+      <span class="cell"><i id="batFill"></i></span><b id="batText">AI</b>
+    </button>
     <button class="icon-btn" id="openSettings" aria-label="Settings">⚙︎</button>
   </header>
 
@@ -53,41 +56,87 @@
       <g id="waves"><path d="M164 86 q6 8 0 16" /><path d="M172 80 q10 14 0 28"/></g>
       <g id="dots"><circle cx="156" cy="40" r="4"/><circle cx="168" cy="32" r="5"/><circle cx="182" cy="22" r="6"/></g>
     </svg>
-    <div class="caption" id="caption" aria-live="polite">Hi! I'm Tara. Let's practise English together.</div>
+    <div class="caption" id="caption" aria-live="polite">Namaste! I'm Tara. Choose what you want to practise.</div>
   </section>
 
   <main>
+    <!-- HOME: one big button for every activity -->
+    <section class="screen" id="s-home">
+      <div class="scroll home">
+        <div class="today">
+          <span>⭐ <b id="xp">0</b> stars</span>
+          <span>🔥 <b id="streak">0</b> <span id="dayWord">days</span></span>
+          <span>📦 <b id="savedCount">0</b> saved</span>
+        </div>
+
+        <h2 class="sect">Speak</h2>
+        <div class="cards">
+          <button class="card-btn" data-go="talk" style="--tint:var(--t1)">
+            <span class="ic">💬</span>
+            <span class="txt"><b>Talk with Tara</b><small>Chat in English. Tara fixes your mistakes.</small></span>
+            <span class="chev" aria-hidden="true">›</span>
+          </button>
+          <button class="card-btn" data-go="translate" data-lang="hi" style="--tint:var(--t2)">
+            <span class="ic deva">हि</span>
+            <span class="txt"><b>Hindi → English</b><small class="deva">हिंदी वाक्य सुनें, अंग्रेज़ी में बोलें</small></span>
+            <span class="chev" aria-hidden="true">›</span>
+          </button>
+          <button class="card-btn" data-go="translate" data-lang="mr" style="--tint:var(--t3)">
+            <span class="ic deva">म</span>
+            <span class="txt"><b>Marathi → English</b><small class="deva">मराठी वाक्य ऐका, इंग्रजीत बोला</small></span>
+            <span class="chev" aria-hidden="true">›</span>
+          </button>
+        </div>
+
+        <h2 class="sect">Games</h2>
+        <div class="cards two">
+          <button class="card-btn tall" data-go="game" data-game="builder" style="--tint:var(--t4)">
+            <span class="ic">🧩</span><span class="txt"><b>Sentence Builder</b><small>Put words in order</small></span>
+          </button>
+          <button class="card-btn tall" data-go="game" data-game="spot" style="--tint:var(--t2)">
+            <span class="ic">🔍</span><span class="txt"><b>Spot the Mistake</b><small>Pick the right sentence</small></span>
+          </button>
+          <button class="card-btn tall" data-go="game" data-game="spell" style="--tint:var(--t3)">
+            <span class="ic">👂</span><span class="txt"><b>Listen &amp; Spell</b><small>Hear a word, type it</small></span>
+          </button>
+          <button class="card-btn tall" data-go="game" data-game="match" style="--tint:var(--t1)">
+            <span class="ic">🔗</span><span class="txt"><b>Word Match</b><small>Match word and meaning</small></span>
+          </button>
+        </div>
+        <p class="hint center">Tap the battery at the top to see how much free AI is left today.</p>
+      </div>
+    </section>
+
     <!-- TALK -->
-    <section class="panel" id="p-talk">
+    <section class="screen" id="s-talk" hidden>
       <div id="log"></div>
       <div class="composer">
         <button class="mic" id="talkMic" aria-label="Speak">🎤</button>
-        <textarea id="msg" placeholder="Tap 🎤 and speak, or type…" aria-label="Your message"></textarea>
+        <textarea id="msg" placeholder="Tap 🎤 and speak, or type here" aria-label="Your message"></textarea>
         <button class="send" id="send">Send</button>
       </div>
     </section>
 
     <!-- TRANSLATE -->
-    <section class="panel" id="p-translate" hidden>
+    <section class="screen" id="s-translate" hidden>
       <div class="scroll">
-        <div class="seg" role="tablist" aria-label="Language">
-          <button data-lang="hi" class="on">हिंदी Hindi</button>
-          <button data-lang="mr">मराठी Marathi</button>
-        </div>
         <div class="card tcard">
-          <div class="lab">Say this in English</div>
+          <div class="card-top"><span class="lab">Say this in English</span><span class="badge" id="tSource"></span></div>
           <p class="native" id="tNative">…</p>
           <p class="roman" id="tRoman"></p>
           <div class="btns">
             <button class="chip" id="tHear">🔊 Hear again</button>
             <button class="chip" id="tHint">💡 Hint</button>
-            <button class="chip" id="tShow">👀 Show answer</button>
+            <button class="chip" id="tShow">👀 Answer</button>
           </div>
           <p class="hint" id="tHintText" hidden></p>
         </div>
+        <div class="mic-zone">
+          <button class="mic huge" id="tMic" aria-label="Say it in English">🎤</button>
+          <span>Tap and say it in English</span>
+        </div>
         <div class="answer-row">
-          <button class="mic big" id="tMic" aria-label="Say it in English">🎤</button>
-          <input id="tInput" placeholder="…or type your English here" aria-label="Your English answer">
+          <input id="tInput" placeholder="…or type it here" aria-label="Your English answer">
           <button class="send" id="tCheck">Check</button>
         </div>
         <div id="tResult"></div>
@@ -95,41 +144,39 @@
       </div>
     </section>
 
-    <!-- GAMES -->
-    <section class="panel" id="p-games" hidden>
+    <!-- GAMES (one game at a time) -->
+    <section class="screen" id="s-game" hidden>
       <div class="scroll" id="gameArea"></div>
     </section>
   </main>
-
-  <nav class="tabs">
-    <button data-tab="talk" class="on"><span>💬</span>Talk</button>
-    <button data-tab="translate"><span>🔁</span>Translate</button>
-    <button data-tab="games"><span>🎮</span>Games</button>
-  </nav>
 </div>
 
-<dialog id="settings">
-  <h2>Settings</h2>
-  <label class="field">Talk topic
-    <select id="topic">
-      <option value="daily life and hobbies">Daily life</option>
-      <option value="work and office situations">At work</option>
-      <option value="a job interview (you are the interviewer, ask one question at a time)">Job interview</option>
-      <option value="travel, shopping and ordering food">Travel &amp; shopping</option>
-      <option value="movies, books and music">Movies &amp; books</option>
-      <option value="anything the learner wants">Free talk</option>
+<dialog id="batteryInfo" aria-labelledby="batTitle">
+  <h2 id="batTitle">Free AI today</h2>
+  <div class="bat-big"><span class="cell"><i id="batBigFill"></i></span></div>
+  <p class="bat-num" id="batNum"></p>
+  <p id="batWhen"></p>
+  <ul class="bat-help">
+    <li>Each Tara reply, answer check or new set of questions uses 1.</li>
+    <li>New questions come from AI first. When the battery is low, games and translate use your saved questions, so Talk keeps working longer.</li>
+    <li id="batBackup" hidden>A backup AI is set up. Tara switches to it when this battery is empty.</li>
+  </ul>
+  <button class="primary wide" id="batClose">OK</button>
+</dialog>
+
+<dialog id="settings" aria-labelledby="setTitle">
+  <h2 id="setTitle">Settings</h2>
+  <label class="field">Text size
+    <select id="textSize">
+      <option value="normal">Normal</option>
+      <option value="large">Large</option>
+      <option value="xl">Extra large</option>
     </select></label>
-  <label class="field">Level
+  <label class="field">My English level
     <select id="level">
-      <option value="beginner">Beginner</option>
+      <option value="beginner">Beginner (easy)</option>
       <option value="intermediate" selected>Intermediate</option>
       <option value="advanced">Advanced</option>
-    </select></label>
-  <label class="field">My accent (helps the mic understand me)
-    <select id="accent">
-      <option value="en-IN" selected>Indian English</option>
-      <option value="en-US">American English</option>
-      <option value="en-GB">British English</option>
     </select></label>
   <label class="field">Tara's speed
     <select id="rate">
@@ -138,16 +185,32 @@
       <option value="1.1">Fast</option>
     </select></label>
   <label class="check"><input type="checkbox" id="autoSpeak" checked> Tara speaks out loud</label>
-  <label class="check"><input type="checkbox" id="autoSend" checked> Send automatically when I stop talking</label>
-  <label class="check"><input type="checkbox" id="saveAI"> Save AI requests: practise Translate from saved sentences</label>
-  <p class="hint" id="savedInfo"></p>
-  <label class="field">App password <input id="password" type="password" autocomplete="off" placeholder="Only if you set one on the server"></label>
-  <div class="row-btns">
-    <button class="secondary" id="newChat">New chat</button>
-    <button class="primary" id="closeSettings">Done</button>
-  </div>
-  <p class="hint">Install: in Chrome tap ⋮ → "Add to Home screen". On iPhone tap Share → "Add to Home Screen".</p>
-  <p class="hint" id="voiceInfo"></p>
+  <details class="more">
+    <summary>More settings</summary>
+    <label class="field">Talk topic
+      <select id="topic">
+        <option value="daily life and hobbies">Daily life</option>
+        <option value="work and office situations">At work</option>
+        <option value="a job interview (you are the interviewer, ask one question at a time)">Job interview</option>
+        <option value="travel, shopping and ordering food">Travel &amp; shopping</option>
+        <option value="movies, books and music">Movies &amp; books</option>
+        <option value="school, friends and family">School &amp; family</option>
+        <option value="anything the learner wants">Free talk</option>
+      </select></label>
+    <label class="field">My accent (helps the mic understand me)
+      <select id="accent">
+        <option value="en-IN" selected>Indian English</option>
+        <option value="en-US">American English</option>
+        <option value="en-GB">British English</option>
+      </select></label>
+    <label class="check"><input type="checkbox" id="autoSend" checked> Send automatically when I stop talking</label>
+    <label class="field">App password <input id="password" type="password" autocomplete="off" placeholder="Only if you set one on the server"></label>
+    <button class="secondary wide" id="newChat">Start a new chat with Tara</button>
+    <p class="hint" id="savedInfo"></p>
+    <p class="hint" id="voiceInfo"></p>
+    <p class="hint">Install: in Chrome tap ⋮ → "Add to Home screen". On iPhone tap Share → "Add to Home Screen".</p>
+  </details>
+  <button class="primary wide" id="closeSettings">Done</button>
 </dialog>
 
 <script type="module" src="/js/app.js"></script>
